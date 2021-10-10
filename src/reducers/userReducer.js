@@ -7,6 +7,8 @@ const userReducer = (state = [], action) => {
       return action.data
     case 'LOGOUT':
       return action.data
+    case 'REGISTER':
+      return action.data
     default:
       return state
   }
@@ -27,6 +29,16 @@ export const logOutUser = () => {
     const user = await userService.logOutUser()
     dispatch({
       type: 'LOGOUT',
+      data: user
+    })
+  }
+}
+
+export const registerUser = (userInfo) => {
+  return async dispatch => {
+    const user = await userService.registerUser(userInfo)
+    dispatch({
+      type: 'REGISTER',
       data: user
     })
   }

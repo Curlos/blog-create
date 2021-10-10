@@ -16,10 +16,17 @@ const logOutUser = async () => {
   return response.data
 }
 
+const registerUser = async (body) => {
+  const response = await axios.post(`${baseURL}/register`, body)
+
+  console.log(response.data)
+  return response.data
+}
+
 const getUser = async (userID) => {
   const response = await axios.get(`${baseURL}/user/${userID}`)
   console.log(response.data)
   return response.data
 }
 
-export default { logInUser, logOutUser, getUser }
+export default { logInUser, logOutUser, registerUser, getUser }

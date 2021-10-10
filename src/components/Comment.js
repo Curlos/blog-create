@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { updateBlogPosts } from '../reducers/blogPostReducer'
 import userService from '../services/users'
 import commentService from '../services/comments'
 
