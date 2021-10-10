@@ -1,43 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux'
 import blogService from '../services/blogPosts'
 import userService from '../services/users'
 import commentService from '../services/comments'
-
-const Comment = ({comment}) => {
-
-  const [commentAuthor, setCommentAuthor] = useState({})
-
-  useEffect(() => {
-    const fetchCommentAuthor = async () => {
-      const data = await userService.getUser(comment.userID)
-      console.log(data)
-      setCommentAuthor(data)
-    }
-
-    fetchCommentAuthor()
-  }, [])
-
-  return (
-    <div className="commentContainer">
-      <div class="commentHeader">
-        <span className="commentAuthor">{commentAuthor.fullName || commentAuthor.username}</span>
-        <span>{comment.timestamp}</span>
-        <span>{comment.likes} likes</span>
-      </div>
-
-      <div className="commentText">
-        {comment.text}
-      </div>
-
-      <div className="commentFooter">
-        <i class="far fa-heart"></i> {comment.likes}
-        <i class="fas fa-reply"></i>
-      </div>
-    </div>
-  )
-}
+import Comment from './Comment'
 
 const BlogPost = (props) => {
   const { id } = useParams()
@@ -47,9 +15,7 @@ const BlogPost = (props) => {
   const [showAddComment, setShowAddComment] = useState(false)
   const [blogComment, setBlogComment] = useState('')
   const isLoggedIn = props.user.user !== undefined
-
-  console.log(props)
-  console.log(isLoggedIn)
+  const loggedInUser = isLoggedIn && props.user.user
 
   useEffect(() => {
     const fetchFromAPI = async () => {
@@ -60,8 +26,6 @@ const BlogPost = (props) => {
       
       for (let commentID of currBlogPost[0].comments) {
         const commentData = await commentService.getOneComment(commentID)
-
-        console.log(commentData[0])
         currComments.push(commentData[0])
       }
 
@@ -71,7 +35,7 @@ const BlogPost = (props) => {
     }
 
     fetchFromAPI()
-  }, [id])
+  }, [])
 
   const toggleShowAddComment = () => {
     setShowAddComment(!showAddComment)
@@ -79,52 +43,85 @@ const BlogPost = (props) => {
 
   const handleBlogCommentChange = (e) => {
     setBlogComment(e.target.value)
+    console.log(blogComment)
   }
 
   const handlePostComment = async () => {
 
-    // const data = commentService.postComment()
+    if (!isLoggedIn) {
+      return false
+    }
+
+
+    const userID = loggedInUser._id
+    const blogID = blogPost._id
+
+    const commentBody = {
+      text: blogComment,
+      userID: userID,
+      blogID: blogID,
+      likes: 0,
+      replies: []
+    }
+
+    console.log(commentBody)
+
+    const response = await commentService.postComment(commentBody)
+    const newComment = response.data
+
+    setBlogComment('')
+    console.log(comments)
+    setComments([...comments, newComment])
+    
+    return response
   }
 
 
   return (
     <div class="blogPostContainer">
       <h1 class="blogPostTitle">{blogPost.title}</h1>
-      <img src={blogPost.image || `https://cdn.theathletic.com/app/uploads/2021/10/08082532/GettyImages-1313693991-scaled.jpg`} alt={blogPost.title} className="blogPostImage" />
-      <div>By {author.fullName}</div>
+      <img src={blogPost.headerImageURL || `https://cdn.theathletic.com/app/uploads/2021/10/08082532/GettyImages-1313693991-scaled.jpg`} alt={blogPost.title} className="blogPostImage" />
       <div class="blogPostText">
-        {blogPost.text}
+        {ReactHtmlParser(blogPost.content)}
       </div>
+
+      <footer className="contentFooter">By {author.fullName || author.username}</footer>
 
       <div className="commentsInfo">
         <div className="totalComments">
           <i className="far fa-comments"></i>
           <span> {comments.length} COMMENTS</span>
         </div>
-        
-        <div>
 
-          {!showAddComment ? (
-            <textarea className="addCommentInitial" placeholder="Add a comment..." onClick={toggleShowAddComment}>
-            </textarea>
-          ) : (
-            <span>
-              <textarea className="addCommentContainer" placeholder="Add a comment..." value={blogComment} onChange={handleBlogCommentChange}>
+        {isLoggedIn ? (
+          <div>
+
+            {!showAddComment ? (
+              <textarea className="addCommentInitial" placeholder="Add a comment..." onClick={toggleShowAddComment}>
               </textarea>
+            ) : (
+              <span>
+                <textarea className="addCommentContainer" placeholder="Add a comment..." value={blogComment} onChange={handleBlogCommentChange}>
+                </textarea>
 
-              <div className="addCommentButtons">
-                <button className="cancelButton" onClick={toggleShowAddComment}>Cancel</button>
-                <button className="postButton" onClick={handlePostComment}>Post</button>
-              </div>
-            </span>
-          )}
-        </div>
+                <div className="addCommentButtons">
+                  <button className="cancelButton" onClick={toggleShowAddComment}>Cancel</button>
+                  <button className="postButton" onClick={handlePostComment}>Post</button>
+                </div>
+              </span>
+            )}
+          </div>
+        ) : (
+          <Link to="/login">Log in to comment</Link>
+        )}
+        
       </div>
+      
 
       <div class="blogPostComments">
         {comments && comments.map((comment) => {
           return (
-            <Comment comment={comment}/>
+            <Comment comment={comment} loggedInUser={loggedInUser} blogPost={blogPost} />
           )
         })}
       </div>
