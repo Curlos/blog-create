@@ -13,6 +13,8 @@ import Header from './components/Header'
 import BlogPosts from './components/BlogPosts'
 import BlogPost from './components/BlogPost'
 import Login from './components/Login'
+import Register from './components/Register'
+import BlogPostForm from './components/BlogPostForm'
 
 const App = () => {
   
@@ -23,7 +25,6 @@ const App = () => {
   }, [dispatch])
 
   const blogPosts = useSelector(state => state.blogPosts)
-  const user = useSelector(state => state.user)
 
   console.log(blogPosts)
 
@@ -39,6 +40,14 @@ const App = () => {
 
           <Route path="/login" exact>
             <Login />
+          </Route>
+
+          <Route path="/register" exact>
+            <Register />
+          </Route>
+
+          <Route path="/create-blog-post" exact>
+            <BlogPostForm />
           </Route>
 
           <Route path="/blog-post/:id" exact>

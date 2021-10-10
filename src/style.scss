@@ -1,15 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;900&display=swap');
 
-@font-face {
-  font-family: "Adobe Caslon Pro";
-  src: url("./fonts/adobe-caslon-pro-cufonfonts-webfont/ACaslonPro-Regular.woff") format("woff"),
-}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: 'Adobe Caslon Pro';
+  font-family: 'Noto Sans';
   background-color: #FFFFFF;
 }
 
@@ -32,10 +29,11 @@ body {
   a {
     color: white;
     text-decoration: none;
+    margin-left: 15px;
   }
 }
 
-.loginForm {
+.loginForm, .registerForm {
   text-align: center;
 
   input {
@@ -67,12 +65,18 @@ body {
     margin-bottom: 10px;
   }
 
+  .blogPostPreviewText {
+    margin-top: 15px;
+  }
+  
+
   .blogPostImage {
     width: 300px;
     margin-left: 5px;
   }
 
   .blogPostAuthor {
+    color: gray;
     margin-right: 15px;
   }
 
@@ -91,15 +95,23 @@ body {
 .blogPostContainer {
   margin: auto 20%;
 
+  img {
+    width: 100%;
+  }
+
   .blogPostTitle {
     font-size: 40px;
     text-align: center;
   }
 
   .blogPostText {
-    font-size: 22px;
-    border-bottom: 1px solid lightgray;
+    font-size: 18px;
     padding-bottom: 70px;
+  }
+
+  .contentFooter {
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 20px;
   }
 
   .blogPostImage {
@@ -191,6 +203,10 @@ body {
       margin: 30px auto;
     }
 
+    .likedComment {
+      color: #D51E5A;
+    }
+
     .commentFooter {
       display: flex;
       justify-content: flex-end;
@@ -204,5 +220,35 @@ body {
         margin-right: 10px;
       }
     }
+  }
+}
+
+.blogPostFormContainer {
+  padding: 80px;
+  font-family: Arial;
+
+  .formContainer {
+    margin: 10px auto;
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px auto;
+      border: 1px solid lightgray;
+    }
+  }
+
+  .invalidTitle {
+    border: 1px solid red;
+    background-color: rgb(255, 221, 221);
+  }
+
+  .invalidText {
+    color: red;
+  }
+
+  
+  button {
+    margin-top: 20px;
   }
 }
