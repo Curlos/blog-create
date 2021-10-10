@@ -11,7 +11,7 @@ const Login = (props) => {
   const history = useHistory()
 
   useEffect(() => {
-    if (props.user.user) {
+    if (props.user.result) {
       history.push('/')
     }
   }, [props.user])

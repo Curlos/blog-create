@@ -22,10 +22,12 @@ const Header = (props) => {
       {props.user.user ? (
         <div>
           <span>{props.user.user.fullName || props.user.user.username}</span>
+          <Link to="/create-blog-post">Create Blog Post</Link>
           <button onClick={handleLogout}>Log Out</button>
         </div>
       ) : (
-        <div>
+        <div className="headerLinks">
+          <Link to="/register">Register</Link>
           <Link to="/login">Log In</Link>
         </div>
       )}
