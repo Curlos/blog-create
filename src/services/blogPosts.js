@@ -9,7 +9,14 @@ const getAll = async () => {
 
 const getOneBlogPost = async (blogID) => {
   const response = await axios.get(baseURL + `/blog-post/${blogID}`)
+  console.log(response)
   return response.data
 }
 
-export default { getAll, getOneBlogPost }
+const postBlog = async (blogPostBody) => {
+  const response = await axios.post(baseURL, blogPostBody)
+  console.log(response)
+  return response.data
+}
+
+export default { getAll, getOneBlogPost, postBlog }

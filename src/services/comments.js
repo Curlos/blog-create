@@ -9,9 +9,15 @@ const getOneComment = async (commentID) => {
 }
 
 const postComment = async (commentBody) => {
-  const response = await axios.post(`${baseURL}/blog-post/comment`)
-  console.log(response.data)
-  return response.data
+  const response = await axios.post(`${baseURL}/blog-post/comment`, commentBody)
+  console.log(response)
+  return response
 }
 
-export default { getOneComment, postComment }
+const likeComment = async (commentBody) => {
+  const response = await axios.put(`${baseURL}/blog-post/comment/like`, commentBody)
+  console.log(response)
+  return response
+}
+
+export default { getOneComment, postComment, likeComment }
